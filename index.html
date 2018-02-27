@@ -1,0 +1,583 @@
+
+
+<meta http-equiv="refresh" content="120" >
+<head>
+ <meta charset="UTF-8">
+  <!-- Plotly.js -->
+  <script src="/plotly-latest.min.js"></script>
+
+    <script src="raphael.min.js"></script>
+    <script src="justgage.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+
+
+<style>
+
+    #zegar1, #zegar2, #zegar3, #zegar4, #zegar5 {
+    display: inline-block;
+    width: 22%;
+    height: 22%;
+    margin-right: 1em;
+   },
+    body {
+            min-height:100%; 
+                    position:relative; 
+                            padding-bottom:[footer-height] 
+    },
+    #footer { 
+
+            position: absolute; 
+            text-align: center;         
+            left: 0 ; right: 0; bottom: 0; 
+                            height:30; 
+    },
+
+  /* #footer {
+          position:absolute;
+          bottom:0;
+          text-align: center;
+          width:100%;
+          height:60px; 
+          background:#17becf;
+   }*/
+    h1 { color: #111; font-family: 'Open Sans Condensed', sans-serif; font-size: 34px; font-weight: 700; line-height: 34px; margin: 0 0 0; padding: 20px 30px; text-align: center; text-transform: uppercase; }
+</style>
+
+
+
+
+</head>
+<body>
+    <h1>Air quality dashboard</h1>
+   <h2>   </h2>
+
+   <p><div id="zegar1"></div>
+<div id="zegar3"></div>
+<div id="zegar2"></div>
+<div id="zegar4"></div></p>
+<br>
+<div id="myDiv"></div>
+<div id="myDiv2"></div>
+<div id="myDiv1"></div>
+<div id="footer">Version 0.8.1 b 02/20/18 </div>
+    <!-- Plotly chart will be drawn inside this DIV -->
+  <script>
+  /* JAVASCRIPT CODE GOES HERE */
+Plotly.d3.csv("/data.csv", function(err, rows){
+
+  function unpack(rows, key) {
+  return rows.map(function(row) { return row[key]; });
+};
+
+
+var trace1 = {
+  type: "scatter",
+  mode: "lines",
+  name: 'PM 2.5 µg/m³ median',
+  x: unpack(rows, 'Date'),
+  y: unpack(rows, 'PPM_2.5'),
+  line: {color: '#17BECF'}
+};
+
+var trace2 = {
+  type: "scatter",
+  mode: "lines",
+  name: 'PM 10 µg/m³ median',
+  x: unpack(rows, 'Date'),
+  y: unpack(rows, 'PPM_10'),
+  line: {color: '#7F7F7F'}
+};
+
+
+var trace3 = {
+  type: "scatter",
+  mode: "lines",
+  name: 'PM 2.5 µg/m³ mean',
+  x: unpack(rows, 'Date'),
+  y: unpack(rows, 'mean25'),
+  line: {color: '#3317aBECF',width:1,dash:'dot'}
+};
+
+var trace4 = {
+  //type: "scatter",
+  mode: "lines",
+  connectgaps: true,
+  name: 'PM 10 µg/m³ mean',
+  x: unpack(rows, 'Date'),
+  y: unpack(rows, 'mean10'),
+  line: {color: '#ffff00',width:1,dash:'dot' }
+};
+
+
+var data = [trace1,trace2,trace3,trace4];
+
+
+var layout = {
+  title: 'SENSOR PM 2.5 and PM 10 [µg/m³]',
+
+"annotations": [
+      {
+        "xref": "paper",
+        "yref": "paper",
+        "text": "WHO LIMITS:<br>PM2.5: 10 µg/m³ &nbsp;annual mean / 25 µg/m³ &nbsp;24-hour mean<br>PM10: 20 µg/m³ &nbsp;annual mean / 50 µg/m³ &nbsp;24-hour mean",
+        "align": "left",
+        "y": 1,
+        "x": 1,
+        "font": {
+          "color": "rgba(68, 68, 68, 0.64)",
+          "size": 9
+        },
+        "showarrow": false
+      }
+    ],
+   yaxis: {
+          title: 'PM [µg/m³]' ,
+          titlefont: {
+                    size: 16,
+                    color: 'rgb(107, 107, 107)'
+                            },
+              tickfont: {
+                        size: 14,
+                        color: 'rgb(107, 107, 107)'
+                                }
+            },
+          legend: {
+                  x: 0,
+                  y: 1.0,
+                      bgcolor: 'rgba(255, 255, 255, 0)',
+                          bordercolor: 'rgba(255, 255, 255, 0)'
+                                },
+  
+    xaxis: {
+  //  autorange: true,
+//    range: ['2015-02-17 14:09:00', '2017-02-17 12:09:00'],
+    rangeselector: {buttons: [
+        {
+          count: 30,
+          label: '30M',
+          step: 'minute',
+          stepmode: 'backward'
+        },
+        {
+          count: 1,
+          label: '1h',
+          step: 'hour',
+          stepmode: 'backward'
+        },
+        {
+          count: 3,
+          label: '3h',
+          step: 'hour',
+          stepmode: 'backward'
+        },
+         {
+          count: 6,
+          label: '6h',
+          step: 'hour',
+          stepmode: 'backward'
+        },
+          {
+          count: 12,
+          label: '12h',
+          step: 'hour',
+          stepmode: 'backward'
+        },
+           {
+          count: 24,
+          label: '24h',
+          step: 'hour',
+          stepmode: 'backward'
+        },
+
+
+        {step: 'all'}
+      ]},
+    rangeslider: {range: [,]},
+    type: 'date'
+  }
+
+
+
+};
+
+
+Plotly.newPlot('myDiv', data, layout);
+})
+
+  </script>
+
+<br>
+<script>
+
+//var myList=[]
+//mylist=getJSON('JSON.txt').done(function (data) {
+//myList = data;
+
+//return myList;
+//});
+
+var jqxhr = $.getJSON( "JSON.txt", function() {
+  console.log( "success" );
+})
+  .done(function(data) {
+    console.log(data);
+    console.log( "second success" );
+
+
+        var z1 = new JustGage({
+          decimals:2,
+          id: "zegar1",
+          value: data[0].median25,
+          min: 0,
+          max: 300,
+          title: "PM 2,5µm",
+	   label:"[µg/m³] median"
+        });
+
+        var z3 = new JustGage({
+          id: "zegar3",
+          decimals:2,
+          value: data[0].mean25,
+          min: 0,
+          max: 300,
+          title: "PM 2,5µm",
+	   label:"[µg/m³] mean"
+        });
+
+
+        var z2 = new JustGage({
+          id: "zegar2",
+          value: data[0].median10,
+          decimals:2,
+          min: 0,
+          max: 300,
+          title: "PM 10µm",
+	   label:"[µg/m³] median"
+        });
+        
+        var z4 = new JustGage({
+          id: "zegar4",
+          value: data[0].mean10,
+          decimals:2,
+          min: 0,
+          max: 300,
+          title: "PM 10µm",
+	   label:"[µg/m³] mean"
+        });
+
+
+
+
+
+
+
+  })
+  .fail(function() {
+    console.log( "error" );
+  })
+  .always(function() {
+    console.log( "complete" );
+  });
+
+
+</script>
+
+
+  <script>
+  /* JAVASCRIPT CODE GOES HERE */
+Plotly.d3.csv("/meanday.csv", function(err, rows){
+
+  function unpack(rows, key) {
+  return rows.map(function(row) { return row[key]; });
+}
+
+  
+var trace1 = {
+  type: "bar",
+  name: 'PM 2.5 [µg/m³]',
+  x: unpack(rows, 'DateTime'),
+  y: unpack(rows, 'PPM25'),
+  marker: {color: '#17BECF'}
+}
+
+var trace2 = {
+  type: "bar",
+  name: 'PM 10 [µg/m³] ',
+  x: unpack(rows, 'DateTime'),
+  y: unpack(rows, 'PPM10'),
+  marker: {color: '#7F7F7F'}
+}
+
+var data = [trace1,trace2];
+
+
+
+var layout = {
+    /*
+         shapes: [
+                {
+                                type: 'rect',
+                                            // x-reference is assigned to the x-values
+                                            xref: 'paper',
+                                                // y-reference is assigned to the plot paper [0,1]
+                                                yref: 'y',
+                                                x0: '0',
+                                                y0: '0',
+                                                x1: '1',
+                                                y1: '10',
+                                                fillcolo: '#7CFC00',
+                                                opacity: 0.2,
+                                                 line: {
+                                                   width: 0
+                                                        }
+                                        },
+], 
+*/
+
+    
+    title: 'SENSOR PM 2.5 and PPM 10 [µg/m³] <br> Daily Average',
+       barmode: 'group',
+  height: 600,
+      bargap: 0.15,
+        bargroupgap: 0.1,
+   
+    
+        
+        "annotations": [
+      {
+        "xref": "paper",
+        "yref": "paper",
+        "text": "WHO LIMITS:<br>PM2.5: 10 µg/m3 &nbsp;annual mean 25 µg/m3 &nbsp;24-hour mean<br>PM10: 20 µg/m3 &nbsp;annual mean 50 µg/m3 &nbsp;24-hour mean",
+        "align": "left",
+        "y": 1,
+        "x": 1,
+        "font": {
+          "color": "rgba(68, 68, 68, 0.64)",
+          "size": 12
+        },
+        "showarrow": false
+      }
+    ],
+  yaxis: {
+          title: 'PM [µg/m³]' ,
+          titlefont: {
+                    size: 16,
+                    color: 'rgb(107, 107, 107)'
+                            },
+              tickfont: {
+                        size: 14,
+                        color: 'rgb(107, 107, 107)'
+                                }
+            },
+          legend: {
+                  x: 0,
+                  y: 1.0,
+                      bgcolor: 'rgba(255, 255, 255, 0)',
+                          bordercolor: 'rgba(255, 255, 255, 0)'
+                                },
+xaxis: {
+    autorange: true,
+//    range: ['2015-02-17 14:09:00', '2017-02-17 12:09:00'],
+    rangeselector: {buttons: [
+        {
+          count: 7,
+          label: '7d',
+          step: 'day',
+          stepmode: 'backward',
+          active: 'True',
+        },
+        {
+          count: 14,
+          label: '14d',
+          step: 'day',
+          stepmode: 'backward'
+        },
+        {
+          count: 1,
+          label: '1M',
+          step: 'Month',
+          stepmode: 'backward'
+        },
+         {
+          count: 3,
+          label: '3M',
+          step: 'month',
+          stepmode: 'backward'
+        },
+          {
+          count: 6,
+          label: '6M',
+          step: 'month',
+          stepmode: 'backward'
+        },
+ 
+
+        {step: 'all'}
+      ]},
+
+   // rangeslider: {range: [,]},
+    type: 'date'
+  }
+
+
+
+};
+    
+
+Plotly.newPlot('myDiv1', data, layout);
+})
+
+  </script>
+
+
+  <script>
+  /* JAVASCRIPT CODE GOES HERE */
+Plotly.d3.csv("/median15.csv", function(err, rows){
+
+  function unpack(rows, key) {
+  return rows.map(function(row) { return row[key]; });
+}
+
+  
+var trace1 = {
+  type: "bar",
+  name: 'PM 2.5 [µg/m³]',
+  x: unpack(rows, 'DateTime'),
+  y: unpack(rows, 'PPM25'),
+  marker: {color: '#17BECF'}
+}
+
+var trace2 = {
+  type: "bar",
+  name: 'PM 10 [µg/m³] ',
+  x: unpack(rows, 'DateTime'),
+  y: unpack(rows, 'PPM10'),
+  marker: {color: '#7F7F7F'}
+}
+
+var data = [trace1,trace2];
+
+
+
+var layout = {
+    /*
+         shapes: [
+                {
+                                type: 'rect',
+                                            // x-reference is assigned to the x-values
+                                            xref: 'paper',
+                                                // y-reference is assigned to the plot paper [0,1]
+                                                yref: 'y',
+                                                x0: '0',
+                                                y0: '0',
+                                                x1: '1',
+                                                y1: '10',
+                                                fillcolo: '#7CFC00',
+                                                opacity: 0.2,
+                                                 line: {
+                                                   width: 0
+                                                        }
+                                        },
+], 
+*/
+
+    
+    title: 'SENSOR PM 2.5 and PPM 10 [µg/m³] <br> 15 minutes median  Average',
+       barmode: 'group',
+  height: 600,
+      bargap: 0.15,
+        bargroupgap: 0.1,
+   
+    
+        
+        "annotations": [
+      {
+        "xref": "paper",
+        "yref": "paper",
+        "text": "WHO LIMITS:<br>PM2.5: 10 µg/m3 &nbsp;annual mean 25 µg/m3 &nbsp;24-hour mean<br>PM10: 20 µg/m3 &nbsp;annual mean 50 µg/m3 &nbsp;24-hour mean",
+        "align": "left",
+        "y": 1,
+        "x": 1,
+        "font": {
+          "color": "rgba(68, 68, 68, 0.64)",
+          "size": 12
+        },
+        "showarrow": false
+      }
+    ],
+  yaxis: {
+          title: 'PM [µg/m³]' ,
+          titlefont: {
+                    size: 16,
+                    color: 'rgb(107, 107, 107)'
+                            },
+              tickfont: {
+                        size: 14,
+                        color: 'rgb(107, 107, 107)'
+                                }
+            },
+          legend: {
+                  x: 0,
+                  y: 1.0,
+                      bgcolor: 'rgba(255, 255, 255, 0)',
+                          bordercolor: 'rgba(255, 255, 255, 0)'
+                                },
+xaxis: {
+    autorange: true,
+//    range: ['2015-02-17 14:09:00', '2017-02-17 12:09:00'],
+    rangeselector: {buttons: [
+        {
+          count: 7,
+          label: '7d',
+          step: 'day',
+          stepmode: 'backward',
+          active: 'True',
+        },
+        {
+          count: 14,
+          label: '14d',
+          step: 'day',
+          stepmode: 'backward'
+        },
+        {
+          count: 1,
+          label: '1M',
+          step: 'Month',
+          stepmode: 'backward'
+        },
+         {
+          count: 3,
+          label: '3M',
+          step: 'month',
+          stepmode: 'backward'
+        },
+          {
+          count: 6,
+          label: '6M',
+          step: 'month',
+          stepmode: 'backward'
+        },
+ 
+
+        {step: 'all'}
+      ]},
+
+   // rangeslider: {range: [,]},
+    type: 'date'
+  }
+
+
+
+};
+    
+
+Plotly.newPlot('myDiv2', data, layout);
+})
+
+  </script>
+
+
+
+
+</body>
+</html>
