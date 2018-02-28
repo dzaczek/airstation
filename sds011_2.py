@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # coding=utf-8
+# extended of  https://gist.github.com/kadamski/92653913a53baf9dd1a8
+
 from __future__ import print_function
 import serial, struct, sys, time
 import string
